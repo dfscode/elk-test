@@ -1,5 +1,7 @@
 # My Awesome Book
 
+[http://quickgitbook.com/books/dfscode/elk-test/\_book/task3.html](http://quickgitbook.com/books/dfscode/elk-test/_book/task3.html)查看书籍
+
 **==elk任务一==：elk测试**  
 英文名著导入测试  
 1.ELK简介  
