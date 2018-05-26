@@ -4,7 +4,7 @@
 
 
 
-日志收集，参考社区推荐方式：
+“日志收集，参考社区推荐方式：
 
 使用了Elasticsearch + fluentd + Kibana的组合，
 
@@ -12,11 +12,9 @@ fluentd作为Rancher的Global Serivce（对应于Kubernetes的daemon set），�
 
 rancher基础服务日志，既本地文件系统压缩存档也及时地发往相应的elasticsearch服务（并未用容器方式启动），
 
-通过Kibana可视化供产品售后使用。基于的日志报警使用的是Yelp开源的elastalert工具。
+通过Kibana可视化供产品售后使用。基于的日志报警使用的是Yelp开源的elastalert工具。”
 
 注意：重要应用机器的数据应当做好备份，时间的选择、压力的预估，以及迁移时考虑做好标记点导入对接下线。
-
-
 
 参考：
 
