@@ -16,7 +16,7 @@ kibana &lt;--- elasticsearch &lt;--- logstash
 
 kibana &lt;--- elasticsearch &lt;--- logstash &lt;--- redis/kafka &lt;--- logstash
 
-测试环境比较简单，压力需求不大，故这里选择第一种模式用两台做集群测试。
+测试环境比较简单，压力需求不大，故这里选择第一种模式用两台做测试。
 
 ## 2. ELK测试部署
 
@@ -29,7 +29,7 @@ kibana &lt;--- elasticsearch &lt;--- logstash &lt;--- redis/kafka &lt;--- logsta
 | linux-node1 | 10.0.0.7 | centos6 |  |
 | linux-node2 | 10.0.0.6 | centos6 |  |
 
-英文名著pride_and_prejudice（《傲慢与偏见》） 做处理数据放在 /tmp下。
+英文名著pride\_and\_prejudice（《傲慢与偏见》） 做处理数据放在 /tmp下。
 
 ![](/assets/import.png)
 
@@ -78,14 +78,13 @@ elasticsearch-2.4.6-1.noarch
 **修改node1配置文件**。
 
 ```
-grep -n '^[a-Z]'
-/etc/elasticsearch/elasticsearch.yml  
+grep -n '^[a-Z]' /etc/elasticsearch/elasticsearch.yml  
 17:cluster.name: elk-test    判别节点是否是统一集群
 23:node.name: elk-node-1     节点的hostname
 33:path.data: /data/es-data  数据存放路径
 37:path.logs: /var/log/elasticsearch/ 日志路径
 43:bootstrap.memory_lock: true 锁住内存，使内存不会再swap中使用
-54:network.host: 10.0.0.7 允许访问的ip 
+54:network.host: 10.0.0.7 主机IP 
 58:http.port: 9200 端口
 95:discovery.zen.ping.unicast.hosts: ["10.0.0.7", "10.0.0.6"] 这里采用单播模式
 ```
@@ -157,14 +156,44 @@ logstash-2.1.3-1.noarch
 
 #### 2\) logstash配置之编写conf文件
 
-logstash配置文件包含三个配置部分，分别为：input{}、filter{}、output{}。
-这里编写conf文件如下： 
+logstash配置文件包含三个配置部分，分别为：input{}、filter{}、output{}。  
+这里编写conf文件如下：
 
 ```
-skdskfmd
+input {
+    file{
+        path => ["/tmp/pride_and_prejudice.txt"]
+        type => "txt-test"
+        start_position => "beginning"
+}
+
+}
+
+
+filter{
+}
+
+output{
+    elasticsearch {
+        hosts => ["10.0.0.7:9200"]
+        index => "txt-test-%{+YYYY.MM}"
+    }
+}
 ```
+
+#### 3\) logstash启动
+
+```
+ /opt/logstash/bin/logstash -f /etc/logstash/conf.d/test-txt.conf
+```
+
+启动成功后可以在head中看到已经建立索引信息了。
+
+![](/assets/import3.png)![](/assets/import4.png)
 
 ### 2.2.3 kinaba
+
+#### 1）kinaba安装
 
 安装同上
 
@@ -190,11 +219,54 @@ kibana-4.5.4-1.x86_64
 
 #### 2）kinaba配置
 
-# 3.  测试环境效果
+kibana只需要配置连接ES即可
 
-## 导入名著 kinaba显示
+```
+vim /opt/kibana/config/kibana.yml
+grep "^[a-Z]" /opt/kibana/config/kibana.yml
+server.port: 5601
+server.host: "0.0.0.0"
+elasticsearch.url: "http://10.0.0.7:9200"
+kibana.index: ".kibana"
+```
 
-elk 任务二： 对比ELK中logstash和fluentd的优缺点
+#### 3）kinaba启动
 
-elk 任务三：将logstash改成fluentd的可行性，以及实现步骤。
+```
+/etc/init.d/kibana start
+```
+
+```
+netstat -lntup |grep 5601
+tcp        0      0 0.0.0.0:5601                0.0.0.0:*                   LISTEN      4756/node
+```
+
+```
+访问地址：http://10.0.0.7:5601
+```
+
+#### 4）kinaba索引
+kibana上不会把es上所有的索引显示出来，需要我们配置那个索引，显示那个索引。
+下面示例创建一个txt-test* 索引,并选择关键字yes作为搜索且保存为新的索引。 
+![](/assets/import5.png)
+![](/assets/import6.png)
+搜索yes关键字
+![](/assets/import7.png)
+![](/assets/import8.png)
+![](/assets/import9.png)
+如上所示我们可以将关键搜索索引保存以方便下载加载使用。 
+上面测试使用英文文本名著做测试，实际生产环境中可以匹配error等关键字。
+![](/assets/import12.png)
+
+#3.  测试总结
+ 如上我们通过名著文本完成类似日志收集分析的搭建。
+ 实际生产环境根据扩展集群规模，收集系统各类日志，安装需要的插件分析监控等，大体原理上是类似的。
+
+# ==elk任务二==： 
+对比ELK中logstash和fluentd的优缺点
+
+#==elk 任务三==：
+将logstash改成fluentd的可行性，以及实现步骤。
+
+
 
