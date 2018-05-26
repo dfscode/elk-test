@@ -22,11 +22,16 @@ kibana &lt;--- elasticsearch &lt;--- logstash &lt;--- redis/kafka &lt;--- logsta
 
 ### 2.1 机器准备
 
-两台虚拟机：  
-hostname \| ip地址\|系统\|软件  
----\|---\|---\|---\|  
-linux-node1\| 10.0.0.7\|centos6\|  
-linux-node2\|10.0.0.6\|centos6\|
+两台虚拟机：
+
+| hostname | ip地址 | 系统 | 软件 |
+| :--- | :--- | :--- | :--- |
+| linux-node1 | 10.0.0.7 | centos6 |  |
+| linux-node2 | 10.0.0.6 | centos6 |  |
+
+英文名著pride_and_prejudice（《傲慢与偏见》） 做处理数据放在 /tmp下。
+
+![](/assets/import.png)
 
 ### 2.2 elk准备
 
@@ -44,7 +49,7 @@ openjdk version "1.8.0_171"
 
 下载并安装GPG key
 
-```shell
+```
  rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
 ```
 
@@ -118,7 +123,7 @@ elasticsearch有许多插件及针对应用，具体可以见附件资料。
 http://10.0.0.7:9200/_plugin/head/
 ```
 
-![image](http://note.youdao.com/noteshare?id=2ff1fdd18ca82dfe38faef8f64260ae5&sub=5335B6D9A4404377B646D23927C56365)
+![](/assets/import1.png)
 
 #### 2.2.2 logstash
 
@@ -126,13 +131,9 @@ http://10.0.0.7:9200/_plugin/head/
 
 下载并安装GPG KEY
 
-```bash
+```
   rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
 ```
-
-
-
-
 
 添加yum仓库
 
@@ -155,6 +156,13 @@ logstash-2.1.3-1.noarch
 ```
 
 #### 2\) logstash配置之编写conf文件
+
+logstash配置文件包含三个配置部分，分别为：input{}、filter{}、output{}。
+这里编写conf文件如下： 
+
+```
+skdskfmd
+```
 
 ### 2.2.3 kinaba
 
