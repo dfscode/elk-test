@@ -2,11 +2,53 @@
 
 搭建一套elk,并导入一套英文名著作为测试。
 
+==elk任务一==：
+
+1. ELK简介
+
+  1.1 ELK一般架构模式
+
+2. ELK测试部署
+
+  2.1 机器准备
+
+  2.2 elk准备
+
+   2.2.1 elasticsearch
+
+      1）elasticsearch安装
+    
+     2）elasticsearch基本配置
+    
+    3）elasticsearch启动
+    
+    3）elasticsearch插件设置 
+
+  2.2.2 logstash dx
+
+   1）logstash安装
+
+   2\) logstash配置之编写conf文件
+
+   3\) logstash启动
+
+  2.2.3 kinaba
+
+   1）kinaba安装
+ 
+  2）kinaba配置
+ 
+  3）kinaba启动
+ 
+  4）kinaba索引
+
+3. 测试总结
+
 ## 1. ELK简介
 
 Elasticsearch是一个分布式搜索引擎和分析引擎，用于数据存储，可提供实时的数据查询。
 
-Logstash 负责从每台机器抓取日志数据，对数据进行格式转换和处理后，输出到Elasticsearch中存储
+Logstash 负责从每台机器抓取日志数据，对数据进行格式转换和处理后，输出到Elasticsearch中存储。
 
 Kibana是一个数据可视化服务，根据用户的操作从Elasticsearch中查询数据，形成相应的分析结果，以图表的形式展现给用户。
 
@@ -26,8 +68,8 @@ kibana &lt;--- elasticsearch &lt;--- logstash &lt;--- redis/kafka &lt;--- logsta
 
 | hostname | ip地址 | 系统 | 软件 |
 | :--- | :--- | :--- | :--- |
-| linux-node1 | 10.0.0.7 | centos6 |  |
-| linux-node2 | 10.0.0.6 | centos6 |  |
+| linux-node1 | 10.0.0.7 | centos6 | elk+java |
+| linux-node2 | 10.0.0.6 | centos6 | el +java |
 
 英文名著pride\_and\_prejudice（《傲慢与偏见》） 做处理数据放在 /tmp下。
 
@@ -105,11 +147,11 @@ grep -n '^[a-Z]' /etc/elasticsearch/elasticsearch.yml
 tcp        0      0 ::ffff:10.0.0.7:9200        :::*                        LISTEN
 ```
 
-同上，修改node2配置文件，并且
+同理，修改node2配置文件。
 
 #### 3）elasticsearch插件设置
 
-elasticsearch有许多插件及针对应用，具体可以见附件资料。  
+elasticsearch有许多插件及针对应用，具体可以详见插件资料。  
   这里安装一个head插件来显示索引和分片情况。
 
 ```
@@ -124,7 +166,7 @@ http://10.0.0.7:9200/_plugin/head/
 
 ![](/assets/import1.png)
 
-#### 2.2.2 logstash
+### 2.2.2 logstash
 
 #### 1）logstash安装
 
@@ -219,7 +261,7 @@ kibana-4.5.4-1.x86_64
 
 #### 2）kinaba配置
 
-kibana只需要配置连接ES即可
+kibana只需要配置连接ES即可。
 
 ```
 vim /opt/kibana/config/kibana.yml
@@ -246,27 +288,31 @@ tcp        0      0 0.0.0.0:5601                0.0.0.0:*                   LIST
 ```
 
 #### 4）kinaba索引
-kibana上不会把es上所有的索引显示出来，需要我们配置那个索引，显示那个索引。
-下面示例创建一个txt-test* 索引,并选择关键字yes作为搜索且保存为新的索引。 
-![](/assets/import5.png)
-![](/assets/import6.png)
-搜索yes关键字
-![](/assets/import7.png)
-![](/assets/import8.png)
-![](/assets/import9.png)
-如上所示我们可以将关键搜索索引保存以方便下载加载使用。 
-上面测试使用英文文本名著做测试，实际生产环境中可以匹配error等关键字。
+
+kibana上不会把es上所有的索引显示出来，需要我们配置那个索引，显示那个索引。  
+下面示例创建一个txt-test\* 索引,并选择关键字yes作为搜索且保存为新的索引。  
+![](/assets/import5.png)  
+![](/assets/import6.png)  
+搜索yes关键字  
+![](/assets/import7.png)  
+![](/assets/import8.png)  
+![](/assets/import9.png)  
+如上所示我们可以将关键搜索索引保存以方便下载加载使用。  
+上面测试使用英文文本名著做测试，实际生产环境中可以匹配定位error等关键字。  
 ![](/assets/import12.png)
 
-#3.  测试总结
- 如上我们通过名著文本完成类似日志收集分析的搭建。
- 实际生产环境根据扩展集群规模，收集系统各类日志，安装需要的插件分析监控等，大体原理上是类似的。
+## 3.  测试总结
 
-# ==elk任务二==： 
+如上我们通过名著文本完成类似日志收集分析的搭建。  
+ 实际生产环境根据扩展集群规模，收集系统各类日志，安装需要的插件进行分析监控等，大体原理上是类似的。
+
+# ==elk任务二==：
+
 对比ELK中logstash和fluentd的优缺点
 
-#==elk 任务三==：
+
+
+# ==elk 任务三==：
+
 将logstash改成fluentd的可行性，以及实现步骤。
-
-
 
