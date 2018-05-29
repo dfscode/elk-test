@@ -23,7 +23,7 @@
 2）kinaba配置  
 3）kinaba启动  
 4）kinaba索引  
-3.测试总结&lt;/br&gt;  
+3.测试总结  
 **==elk任务二==：对比ELK中logstash和fluentd的优缺点**  
 **==elk任务三==：将logstash改成fluentd的可行性，以及实现步骤。**
 
